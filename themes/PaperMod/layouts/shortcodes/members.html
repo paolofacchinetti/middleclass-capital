@@ -1,0 +1,13 @@
+<!-- put bunch of photos in /static/img/albumName -->
+<!-- and insert shortcode "album albumName" in blogpost.md -->
+{{ $albumUrl := print "/static/" ($.Get 0) }}
+<div class="gallery">
+{{ range readDir $albumUrl }}
+    {{ $imgURL := print "/" ($.Get 0) "/" .Name | absURL }}
+    {{ $jpg := ".jpg" }}
+    {{ $user := strings.TrimSuffix $jpg .Name }}
+    <figure>
+        <a href="https://twitter.com/{{ $user }}"><img src="{{ $imgURL }}" class="gallery__img" title="{{ $user }}"></a>
+    </figure>
+{{ end }}
+</div>

@@ -1,0 +1,46 @@
+baseURL: 'https://middleclass.capital/'
+languageCode: 'en-us'
+title: 'Middle Class Capital'
+theme: 'PaperMod'
+
+
+menu:
+    main:
+        - name: Members
+          url: members
+          weight: 5
+        - name: Articles
+          url: articles
+          weight: 10
+        - name: Portfolio
+          url: portfolio
+          weight: 10
+        - name: Twitter
+          url: https://twitter.com/MidClassCapital
+
+params:
+    env: production
+    description: "Middle Class Capital"
+    author: shaki
+    displayFullLangName: true
+    ShowPostNavLinks: true
+    ShowBreadCrumbs: true
+    ShowCodeCopyButtons: true
+    ShowRssButtonInSectionTermList: true
+    ShowToc: true
+
+    profileMode:
+      enabled: true
+      title: 'Middle Class Capital'
+      imageUrl: "mcc.jpg"
+      imageTitle: mcc
+      # imageWidth: 120
+      # imageHeight: 120
+      subtitle: "Helping bleeding edge crypto tech move forward"
+      buttons:
+          - name: Members
+            url: members
+          - name: Articles
+            url: articles
+          - name: Portfolio
+            url: portfolio

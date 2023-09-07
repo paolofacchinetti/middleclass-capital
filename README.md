@@ -1,11 +1,7 @@
-# MCC website source
+# MCC
 
-built with Hugo
+source for [middleclass.capital](https://middleclass.capital)
 
-##### Serve:
+##### local development:
 
 `hugo serve -D`
-
-##### Build static files:
-
-`hugo -D`

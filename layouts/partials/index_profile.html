@@ -1,0 +1,234 @@
+<section class="mcc-home" aria-labelledby="mcc-title" data-mcc-home>
+    <div class="mcc-boot-scene" data-mcc-boot-scene>
+        <canvas class="mcc-boot-canvas" data-mcc-canvas aria-label="{{ site.Title }}"></canvas>
+
+        <button class="mcc-floppy-hotspot" type="button" data-mcc-insert aria-label="Insert floppy">
+            <span>Click floppy<br>to insert</span>
+        </button>
+
+        <div class="mcc-boot-brand" aria-hidden="true">
+            <h1>{{ site.Title }}</h1>
+            {{- with site.Params.profileMode.subtitle }}
+            <p>{{ . | markdownify }}</p>
+            {{- end }}
+        </div>
+
+        <div class="mcc-monitor-desktop" data-mcc-desktop aria-hidden="true">
+            <a class="mcc-screen-drive" href="{{ "" | relURL }}" aria-label="{{ site.Title }}">
+                <span class="mcc-screen-computer" aria-hidden="true"></span>
+                <span>A:\</span>
+            </a>
+
+            <nav class="mcc-screen-shortcuts" aria-label="{{ site.Title }}">
+                {{- range site.Menus.main }}
+                {{- $isExternal := findRE "://" .URL }}
+                {{- $href := cond (gt (len $isExternal) 0) .URL (.URL | relURL) }}
+                {{- $slug := .Name | urlize }}
+                {{- if $isExternal }}
+                <a class="mcc-screen-shortcut mcc-screen-shortcut--{{ $slug }}" href="{{ $href }}" rel="noopener">
+                    <span aria-hidden="true"></span>
+                    <strong>{{ .Name }}</strong>
+                </a>
+                {{- else }}
+                <button class="mcc-screen-shortcut mcc-screen-shortcut--{{ $slug }}" type="button" data-mcc-open="{{ $slug }}">
+                    <span aria-hidden="true"></span>
+                    <strong>{{ .Name }}</strong>
+                </button>
+                {{- end }}
+                {{- end }}
+            </nav>
+
+            <section class="mcc-preview-window mcc-preview-window--members" data-mcc-window="members" aria-label="Members">
+                <header>
+                    <span>Members</span>
+                    <span class="mcc-window-buttons">
+                        <button class="mcc-window-button mcc-window-button--min" type="button" aria-label="Minimize Members" data-mcc-close="members"></button>
+                        <button class="mcc-window-button mcc-window-button--max" type="button" aria-label="Focus Members" data-mcc-focus="members"></button>
+                        <button class="mcc-window-button mcc-window-button--close" type="button" aria-label="Close Members" data-mcc-close="members"></button>
+                    </span>
+                </header>
+                <div class="mcc-preview-members">
+                    {{- range readDir "static/avatars" }}
+                    {{- $imgURL := print "/avatars/" .Name | relURL }}
+                    {{- $user := strings.TrimSuffix ".jpg" .Name }}
+                    <a href="https://twitter.com/{{ $user }}" rel="noopener" aria-label="{{ $user }}">
+                        <img src="{{ $imgURL }}" alt="" loading="eager" decoding="async">
+                        <em>{{ $user }}</em>
+                    </a>
+                    {{- end }}
+                </div>
+            </section>
+
+            <section class="mcc-preview-window mcc-preview-window--articles" data-mcc-window="articles" aria-label="Articles">
+                <header>
+                    <span>Articles</span>
+                    <span class="mcc-window-buttons">
+                        <button class="mcc-window-button mcc-window-button--min" type="button" aria-label="Minimize Articles" data-mcc-close="articles"></button>
+                        <button class="mcc-window-button mcc-window-button--max" type="button" aria-label="Focus Articles" data-mcc-focus="articles"></button>
+                        <button class="mcc-window-button mcc-window-button--close" type="button" aria-label="Close Articles" data-mcc-close="articles"></button>
+                    </span>
+                </header>
+                <div class="mcc-preview-docs">
+                    {{- range first 6 (where site.RegularPages "Section" "articles") }}
+                    {{- $articleID := .Title | urlize }}
+                    {{- with .File }}{{ $articleID = .BaseFileName | urlize }}{{ end }}
+                    {{- $articleFile := .Title }}
+                    {{- with .File }}{{ $articleFile = .LogicalName }}{{ end }}
+                    <button type="button" data-mcc-article-open="{{ $articleID }}" aria-label="{{ .Title }}">
+                        <span aria-hidden="true"></span>
+                        <em>{{ $articleFile }}</em>
+                    </button>
+                    {{- end }}
+                </div>
+            </section>
+
+            {{- range first 6 (where site.RegularPages "Section" "articles") }}
+            {{- $articleID := .Title | urlize }}
+            {{- with .File }}{{ $articleID = .BaseFileName | urlize }}{{ end }}
+            {{- $articleFile := .Title }}
+            {{- with .File }}{{ $articleFile = .LogicalName }}{{ end }}
+            <template data-mcc-article-template="{{ $articleID }}" data-mcc-article-title="{{ .Title }}" data-mcc-article-file="{{ $articleFile }}">
+                <article class="mcc-article-document">
+                    <div class="mcc-article-window__meta">
+                        {{- with .Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "Jan 2 2006" }}</time>{{- end }}
+                        {{- with .Params.author }}<span>{{ . }}</span>{{- end }}
+                    </div>
+                    <div class="mcc-article-window__content mcc-post-content">
+                        {{ .Content }}
+                    </div>
+                </article>
+            </template>
+            {{- end }}
+
+            <section class="mcc-preview-window mcc-preview-window--portfolio" data-mcc-window="portfolio" aria-label="Portfolio">
+                <header>
+                    <span>Portfolio</span>
+                    <span class="mcc-window-buttons">
+                        <button class="mcc-window-button mcc-window-button--min" type="button" aria-label="Minimize Portfolio" data-mcc-close="portfolio"></button>
+                        <button class="mcc-window-button mcc-window-button--max" type="button" aria-label="Focus Portfolio" data-mcc-focus="portfolio"></button>
+                        <button class="mcc-window-button mcc-window-button--close" type="button" aria-label="Close Portfolio" data-mcc-close="portfolio"></button>
+                    </span>
+                </header>
+                <div class="mcc-preview-logos">
+                    {{- range readDir "static/investments" }}
+                    {{- $name := strings.TrimSuffix (path.Ext .Name) .Name }}
+                    <span class="mcc-preview-logo-card" aria-label="{{ $name }}">
+                        <img src="{{ printf "/investments/%s" .Name | relURL }}" alt="{{ $name }}" loading="eager" decoding="async">
+                        <em>{{ .Name }}</em>
+                    </span>
+                    {{- end }}
+                </div>
+            </section>
+
+            <section class="mcc-preview-window mcc-preview-window--twitter" data-mcc-window="twitter" aria-label="Twitter">
+                <header>
+                    <span>Twitter</span>
+                    <span class="mcc-window-buttons">
+                        <button class="mcc-window-button mcc-window-button--min" type="button" aria-label="Minimize Twitter" data-mcc-close="twitter"></button>
+                        <button class="mcc-window-button mcc-window-button--max" type="button" aria-label="Focus Twitter" data-mcc-focus="twitter"></button>
+                        <button class="mcc-window-button mcc-window-button--close" type="button" aria-label="Close Twitter" data-mcc-close="twitter"></button>
+                    </span>
+                </header>
+                <a class="mcc-twitter-window-link" href="https://twitter.com/MidClassCapital" rel="noopener" aria-label="Twitter">
+                    <span class="mcc-preview-twitter-mark" aria-hidden="true"></span>
+                    <b aria-hidden="true"></b>
+                </a>
+            </section>
+
+            <footer class="mcc-monitor-taskbar" aria-label="{{ site.Title }}">
+                <a href="{{ "" | relURL }}"><span aria-hidden="true"></span>Start</a>
+                <time data-mcc-clock>12:00 PM</time>
+            </footer>
+        </div>
+
+        <div class="mcc-mobile-gateway">
+            <div class="mcc-window mcc-window--home" aria-label="{{ site.Title }}">
+                <header class="mcc-titlebar">
+                    <div class="mcc-titlebar__identity">
+                        <span class="mcc-computer-icon" aria-hidden="true">
+                            <span></span>
+                        </span>
+                        <span>A:\</span>
+                    </div>
+
+                    <div class="mcc-window-controls" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </header>
+
+                <div class="mcc-window__body">
+                    {{- with site.Params.profileMode }}
+                    <div class="mcc-brand-meta">
+                        <h1 id="mcc-title">{{ .title | default site.Title | markdownify }}</h1>
+                        {{- with .subtitle }}
+                        <p>{{ . | markdownify }}</p>
+                        {{- end }}
+                    </div>
+                    {{- end }}
+
+                    <nav class="mcc-destination-grid" aria-label="{{ site.Title }}">
+                        {{- range site.Menus.main }}
+                        {{- $isExternal := findRE "://" .URL }}
+                        {{- $href := cond (gt (len $isExternal) 0) .URL (.URL | relURL) }}
+                        {{- $iconClass := printf "mcc-%s-icon" (.Name | urlize) }}
+                        <a class="mcc-destination-tile" href="{{ $href }}" {{ if $isExternal }}rel="noopener"{{ end }}>
+                            <span class="mcc-tile-icon {{ $iconClass }}" aria-hidden="true">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                            <span>{{ .Name }}</span>
+                        </a>
+                        {{- end }}
+                    </nav>
+                </div>
+
+                <footer class="mcc-taskbar" aria-label="{{ site.Title }}">
+                    <a class="mcc-taskbar__button" href="{{ "" | relURL }}" aria-label="{{ site.Title }}">
+                        <span class="mcc-start-mark" aria-hidden="true"></span>
+                    </a>
+                    <div class="mcc-taskbar__program" aria-hidden="true">
+                        <span class="mcc-computer-icon">
+                            <span></span>
+                        </span>
+                        <span>A:\</span>
+                    </div>
+                    <div class="mcc-taskbar__tray" aria-hidden="true">
+                        <span class="mcc-speaker-mark"></span>
+                        <time data-mcc-clock>12:00 PM</time>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    <noscript>
+        <div class="mcc-desktop">
+            <div class="mcc-window mcc-window--home" aria-label="{{ site.Title }}">
+                <header class="mcc-titlebar">
+                    <div class="mcc-titlebar__identity">
+                        <span class="mcc-computer-icon" aria-hidden="true"><span></span></span>
+                        <span>A:\</span>
+                    </div>
+                </header>
+                <nav class="mcc-destination-grid" aria-label="{{ site.Title }}">
+                    {{- range site.Menus.main }}
+                    {{- $isExternal := findRE "://" .URL }}
+                    {{- $href := cond (gt (len $isExternal) 0) .URL (.URL | relURL) }}
+                    <a class="mcc-destination-tile" href="{{ $href }}" {{ if $isExternal }}rel="noopener"{{ end }}>
+                        <span>{{ .Name }}</span>
+                    </a>
+                    {{- end }}
+                </nav>
+            </div>
+        </div>
+    </noscript>
+</section>
+
+{{- $mccBoot := resources.Get "js/mcc-boot.js" }}
+{{- if $mccBoot }}
+{{- $mccBoot = $mccBoot | js.Build (dict "target" "es2020" "format" "iife" "minify" (hugo.IsProduction | or (eq site.Params.env "production"))) | fingerprint }}
+<script defer src="{{ $mccBoot.RelPermalink }}"></script>
+{{- end }}

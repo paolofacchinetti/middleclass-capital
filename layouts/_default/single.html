@@ -1,0 +1,57 @@
+{{- define "main" }}
+{{- $kindClass := .Section | default (.File.BaseFileName | default "page") | urlize }}
+<article class="mcc-page-window mcc-page-window--{{ $kindClass }}">
+  <header class="mcc-page-titlebar">
+    <div class="mcc-page-titlebar__label">
+      <span class="mcc-window-mini-icon" aria-hidden="true"></span>
+      <span>{{ .Title }}</span>
+    </div>
+    <div class="mcc-window-controls" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <div class="mcc-page-toolbar" aria-label="{{ .Title }}">
+    <a href="{{ "" | relURL }}">A:\</a>
+    {{- with .Section }}
+    <span>{{ . }}</span>
+    {{- end }}
+  </div>
+
+  <div class="mcc-page-content">
+    <header class="mcc-document-header">
+      <h1>{{ .Title }}</h1>
+      {{- if .Description }}
+      <p>{{ .Description }}</p>
+      {{- end }}
+      {{- if and (not (.Param "hideMeta")) (not (or (eq .Title "Members") (eq .Title "Portfolio"))) }}
+      <div class="mcc-document-meta">
+        {{- partial "post_meta.html" . -}}
+      </div>
+      {{- end }}
+    </header>
+
+    {{- if and (eq .Title "Portfolio") }}
+    <div class="mcc-investment-grid">
+      {{- range readDir "static/investments" }}
+      {{- $name := strings.TrimSuffix (path.Ext .Name) .Name }}
+      <a class="mcc-investment-file" href="{{ printf "/investments/%s" .Name | relURL }}" aria-label="{{ $name }}">
+        <span class="mcc-investment-preview">
+          <img src="{{ printf "/investments/%s" .Name | relURL }}" alt="{{ $name }}" loading="lazy">
+        </span>
+        <span>{{ $name }}</span>
+      </a>
+      {{- end }}
+    </div>
+    {{- else if .Content }}
+    <div class="post-content mcc-post-content">
+      {{- if not (.Param "disableAnchoredHeadings") }}
+      {{- partial "anchored_headings.html" .Content -}}
+      {{- else }}{{ .Content }}{{ end }}
+    </div>
+    {{- end }}
+  </div>
+</article>
+{{- end }}

@@ -1,0 +1,12 @@
+{
+  "name": "middleclass-capital",
+  "private": true,
+  "scripts": {
+    "build": "hugo --minify --cacheDir /tmp/hugo_cache_mcc",
+    "dev": "hugo serve -D"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0",
+    "three": "^0.184.0"
+  }
+}

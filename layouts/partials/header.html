@@ -1,0 +1,19 @@
+<header class="mcc-site-header">
+    <nav class="mcc-site-nav" aria-label="{{ site.Title }}">
+        <a class="mcc-site-logo" href="{{ "" | relURL }}" accesskey="h" title="{{ site.Title }}">
+            <span class="mcc-computer-icon" aria-hidden="true"><span></span></span>
+            <span>{{ site.Title }}</span>
+        </a>
+
+        <ul class="mcc-site-menu">
+            {{- range site.Menus.main }}
+            {{- $isExternal := findRE "://" .URL }}
+            <li>
+                <a href="{{ .URL | relURL }}" {{ if $isExternal }}rel="noopener"{{ end }}>
+                    {{ .Name }}
+                </a>
+            </li>
+            {{- end }}
+        </ul>
+    </nav>
+</header>

@@ -1,0 +1,56 @@
+{{- define "main" }}
+{{- if and site.Params.profileMode.enabled .IsHome }}
+{{- partial "index_profile.html" . }}
+{{- else }}
+<section class="mcc-page-window mcc-page-window--list">
+  <header class="mcc-page-titlebar">
+    <div class="mcc-page-titlebar__label">
+      <span class="mcc-window-mini-icon" aria-hidden="true"></span>
+      <span>{{ .Title | default site.Title }}</span>
+    </div>
+    <div class="mcc-window-controls" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </header>
+
+  <div class="mcc-page-toolbar" aria-label="{{ .Title }}">
+    <a href="{{ "" | relURL }}">A:\</a>
+    <span>{{ .Title | default site.Title }}</span>
+  </div>
+
+  <div class="mcc-page-content">
+    <header class="mcc-document-header">
+      <h1>{{ .Title | default site.Title }}</h1>
+      {{- with .Description }}
+      <p>{{ . | markdownify }}</p>
+      {{- end }}
+    </header>
+
+    {{- if eq .Section "articles" }}
+    <div class="mcc-file-grid">
+      {{- range .Pages.ByDate.Reverse }}
+      <a class="mcc-document-file" href="{{ .RelPermalink }}">
+        <span class="mcc-document-icon" aria-hidden="true"><span></span></span>
+        <span>{{ with .File }}{{ .LogicalName }}{{ else }}{{ .Title }}{{ end }}</span>
+        {{- with .Date }}
+        <time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2006-01-02" }}</time>
+        {{- end }}
+      </a>
+      {{- end }}
+    </div>
+    {{- else }}
+    <div class="mcc-file-grid">
+      {{- range .Pages }}
+      <a class="mcc-document-file" href="{{ .RelPermalink }}">
+        <span class="mcc-folder-icon" aria-hidden="true"></span>
+        <span>{{ .Title }}</span>
+      </a>
+      {{- end }}
+    </div>
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+{{- end }}

@@ -1,0 +1,12 @@
+{{ $albumUrl := print "/static/" ($.Get 0) }}
+<div class="mcc-member-grid">
+{{ range readDir $albumUrl }}
+    {{ $imgURL := print "/" ($.Get 0) "/" .Name | relURL }}
+    {{ $jpg := ".jpg" }}
+    {{ $user := strings.TrimSuffix $jpg .Name }}
+    <a class="mcc-member-card" href="https://twitter.com/{{ $user }}" rel="noopener">
+        <img src="{{ $imgURL }}" alt="{{ $user }}" loading="lazy">
+        <span>{{ $user }}</span>
+    </a>
+{{ end }}
+</div>

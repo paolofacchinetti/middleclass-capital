@@ -1,0 +1,17 @@
+{{- if not (.Param "hideFooter") }}
+<footer class="mcc-site-footer" aria-label="{{ site.Title }}">
+    <a class="mcc-taskbar__button" href="{{ "" | relURL }}" aria-label="{{ site.Title }}">
+        <span class="mcc-start-mark" aria-hidden="true"></span>
+    </a>
+    <div class="mcc-taskbar__program" aria-hidden="true">
+        <span class="mcc-computer-icon"><span></span></span>
+        <span>A:\</span>
+    </div>
+    <div class="mcc-taskbar__tray" aria-hidden="true">
+        <span class="mcc-speaker-mark"></span>
+        <time data-mcc-clock>12:00 PM</time>
+    </div>
+</footer>
+{{- end }}
+
+{{- partial "extend_footer.html" . }}

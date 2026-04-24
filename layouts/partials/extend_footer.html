@@ -1,0 +1,35 @@
+<script>
+(() => {
+  const tiles = [...document.querySelectorAll(".mcc-destination-tile")];
+  const clock = document.querySelector("[data-mcc-clock]");
+
+  function updateClock() {
+    if (!clock) return;
+    clock.textContent = new Date().toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
+  tiles.forEach((tile) => {
+    tile.addEventListener("pointerenter", () => {
+      tiles.forEach((item) => item.classList.remove("is-active"));
+      tile.classList.add("is-active");
+    });
+
+    tile.addEventListener("focus", () => {
+      tiles.forEach((item) => item.classList.remove("is-active"));
+      tile.classList.add("is-active");
+    });
+
+    tile.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      tile.classList.add("is-launching");
+    });
+  });
+
+  tiles[0]?.classList.add("is-active");
+  updateClock();
+  window.setInterval(updateClock, 30000);
+})();
+</script>

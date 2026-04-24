@@ -1,4 +1,11 @@
 <section class="mcc-home" aria-labelledby="mcc-title" data-mcc-home>
+    <script>
+        (() => {
+            const root = document.currentScript.closest("[data-mcc-home]");
+            if (!root || !window.matchMedia("(max-width: 760px), (max-aspect-ratio: 3/4)").matches) return;
+            root.classList.add("is-phone-mode", "is-booted", "is-screen-mode", "is-screen-ready");
+        })();
+    </script>
     <div class="mcc-boot-scene" data-mcc-boot-scene>
         <canvas class="mcc-boot-canvas" data-mcc-canvas aria-label="{{ site.Title }}"></canvas>
 
@@ -11,6 +18,10 @@
             {{- with site.Params.profileMode.subtitle }}
             <p>{{ . | markdownify }}</p>
             {{- end }}
+        </div>
+
+        <div class="mcc-crt-boot-title" aria-hidden="true">
+            <img src="{{ "/design/mcc-crt-boot-logo.png" | relURL }}" alt="">
         </div>
 
         <div class="mcc-monitor-desktop" data-mcc-desktop aria-hidden="true">
@@ -37,6 +48,36 @@
                 {{- end }}
                 {{- end }}
             </nav>
+
+            <div class="mcc-os-squiggle" aria-hidden="true">
+                <svg viewBox="0 0 900 280" role="img" focusable="false">
+                    <defs>
+                        <linearGradient id="mcc-os-squiggle-gradient" x1="80" y1="220" x2="820" y2="220" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#ff1b12" />
+                            <stop offset="0.2" stop-color="#ffdc00" />
+                            <stop offset="0.38" stop-color="#34ff00" />
+                            <stop offset="0.57" stop-color="#00d7e9" />
+                            <stop offset="0.75" stop-color="#0728ff" />
+                            <stop offset="1" stop-color="#f000ff" />
+                        </linearGradient>
+                        <linearGradient id="mcc-os-squiggle-bevel" x1="120" y1="78" x2="820" y2="226" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#ffffff" stop-opacity="0.85" />
+                            <stop offset="0.42" stop-color="#ffffff" stop-opacity="0.42" />
+                            <stop offset="1" stop-color="#ffffff" stop-opacity="0" />
+                        </linearGradient>
+                        <path id="mcc-os-squiggle-path" d="M80 220 C175 220 242 201 310 126 C354 76 386 52 450 52 C514 52 546 76 590 126 C658 201 725 220 820 220" />
+                    </defs>
+                    <g class="mcc-os-squiggle__object">
+                        <use class="mcc-os-squiggle__cast" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__depth mcc-os-squiggle__depth--far" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__depth mcc-os-squiggle__depth--mid" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__depth mcc-os-squiggle__depth--near" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__line" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__bevel" href="#mcc-os-squiggle-path"></use>
+                        <use class="mcc-os-squiggle__glint" href="#mcc-os-squiggle-path"></use>
+                    </g>
+                </svg>
+            </div>
 
             <section class="mcc-preview-window mcc-preview-window--members" data-mcc-window="members" aria-label="Members">
                 <header>

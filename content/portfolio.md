@@ -8,4 +8,4 @@ author: "  "
 
 {{< figure src="/investments/velodata.png" link="https://velodata.app/" width="25%" >}}
 
-{{< figure src="/investments/poolshark.png" link="https://www.poolshark.fi/" width="60%" >}}
+{{< figure src="/investments/bcap.png" width="60%" >}}

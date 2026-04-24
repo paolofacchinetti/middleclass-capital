@@ -835,7 +835,7 @@
     radial-gradient(circle at 70% 44%, rgba(44, 177, 169, calc(var(--mcc-boot-glow) * 0.24)), transparent 24%),
     #090c08;
   transform: translate3d(var(--mcc-screen-x), var(--mcc-screen-y), 0) scale(var(--mcc-screen-zoom));
-  transform-origin: 71.2% 33.8%;
+  transform-origin: var(--mcc-screen-origin-x, 71.2%) var(--mcc-screen-origin-y, 33.8%);
   transition:
     opacity 700ms ease,
     filter 700ms ease,
@@ -1264,7 +1264,7 @@
   object-fit: contain;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 760px), (max-aspect-ratio: 3/4) {
   .mcc-site-nav {
     align-items: stretch;
     flex-direction: column;
@@ -1306,19 +1306,19 @@
 
 /* Concept-fidelity pass: desk scene, CRT desktop, and compact native windows. */
 .mcc-home-body {
-  background: #070906;
+  background: #080b07;
 }
 
 .mcc-home {
-  background: #070906;
+  background: #080b07;
 }
 
 .mcc-boot-scene {
   z-index: 2;
   background:
     radial-gradient(circle at 76% 39%, rgba(18, 146, 137, calc(var(--mcc-boot-glow) * 0.28)), transparent 25%),
-    radial-gradient(circle at 20% 15%, rgba(231, 215, 170, 0.06), transparent 24%),
-    #070906;
+    radial-gradient(circle at 20% 15%, rgba(231, 215, 170, 0.085), transparent 24%),
+    #080b07;
 }
 
 .mcc-home.is-booted .mcc-boot-scene {
@@ -1328,9 +1328,9 @@
 }
 
 .mcc-home.is-zooming {
-  --mcc-screen-zoom: 3.36;
-  --mcc-screen-x: -21.2vw;
-  --mcc-screen-y: 16.2vh;
+  --mcc-screen-zoom: var(--mcc-screen-zoom-active, 3.36);
+  --mcc-screen-x: var(--mcc-screen-x-active, -21.2vw);
+  --mcc-screen-y: var(--mcc-screen-y-active, 16.2vh);
 }
 
 .mcc-home.is-screen-mode {
@@ -1365,21 +1365,24 @@
 }
 
 .mcc-floppy-hotspot {
-  left: 22.8%;
-  bottom: 17.2%;
-  width: min(18vw, 285px);
-  height: min(10vw, 132px);
+  left: var(--mcc-floppy-hotspot-left, 22.8%);
+  top: var(--mcc-floppy-hotspot-top, auto);
+  bottom: var(--mcc-floppy-hotspot-bottom, 17.2%);
+  width: var(--mcc-floppy-hotspot-width, min(18vw, 285px));
+  height: var(--mcc-floppy-hotspot-height, min(10vw, 132px));
   transition: opacity 520ms ease;
 }
 
 .mcc-floppy-hotspot span {
   position: absolute;
-  right: calc(100% + 16px);
-  bottom: 5px;
+  right: calc(100% + var(--mcc-floppy-tooltip-gap, 18px));
+  top: 50%;
+  bottom: auto;
   display: grid;
   min-width: 118px;
   min-height: 48px;
   place-items: center;
+  transform: translateY(-50%);
   color: #f2ead5;
   background: rgba(16, 12, 8, 0.8);
   border: 2px dashed rgba(242, 234, 213, 0.78);
@@ -1398,11 +1401,13 @@
 .mcc-floppy-hotspot span::after {
   position: absolute;
   right: -17px;
-  bottom: 12px;
+  top: 50%;
+  bottom: auto;
   width: 14px;
   height: 2px;
   content: "";
   background: #f2ead5;
+  transform: translateY(-50%);
 }
 
 .mcc-home.is-booting .mcc-floppy-hotspot {
@@ -1433,6 +1438,45 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 160ms ease;
+}
+
+.mcc-crt-boot-title {
+  position: absolute;
+  left: var(--mcc-monitor-left, 54.4%);
+  top: var(--mcc-monitor-top, 18.4%);
+  z-index: 5;
+  display: grid;
+  width: var(--mcc-monitor-width, 33.6%);
+  height: var(--mcc-monitor-height, 30.8%);
+  place-items: center;
+  padding: 4.6%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.985);
+  transition:
+    opacity 260ms ease,
+    transform 520ms ease;
+}
+
+.mcc-crt-boot-title img {
+  width: min(38%, 118px);
+  max-height: 48%;
+  object-fit: contain;
+  opacity: 0.94;
+  filter:
+    contrast(1.08)
+    drop-shadow(0 0 8px rgba(245, 229, 180, 0.18))
+    drop-shadow(2px 2px 0 rgba(0, 39, 35, 0.32));
+}
+
+.mcc-home.is-booting:not(.is-screen-mode) .mcc-crt-boot-title {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.mcc-home.is-screen-mode .mcc-crt-boot-title {
+  opacity: 0;
+  transition-duration: 140ms;
 }
 
 .mcc-home.is-screen-mode .mcc-monitor-desktop {
@@ -2038,6 +2082,158 @@
   height: 47px;
 }
 
+.mcc-os-squiggle {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  z-index: 1;
+  width: min(44vw, 690px);
+  aspect-ratio: 900 / 280;
+  opacity: 0.82;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  perspective: 920px;
+  filter:
+    drop-shadow(6px 8px 0 rgba(0, 0, 0, 0.16))
+    drop-shadow(0 0 14px rgba(219, 255, 222, 0.16));
+}
+
+.mcc-os-squiggle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  transform: rotateX(8deg) rotateY(-6deg) rotateZ(0deg);
+  transform-origin: 50% 50%;
+  transform-style: preserve-3d;
+}
+
+.mcc-os-squiggle__object {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.mcc-os-squiggle use {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  vector-effect: non-scaling-stroke;
+}
+
+.mcc-os-squiggle__cast {
+  stroke: rgba(0, 0, 0, 0.28);
+  stroke-width: 28;
+  opacity: 0.46;
+  transform: translate(19px, 22px);
+  filter: blur(3px);
+}
+
+.mcc-os-squiggle__depth {
+  stroke-width: 22;
+  opacity: 0.9;
+}
+
+.mcc-os-squiggle__depth--far {
+  stroke: #291b35;
+  transform: translate(15px, 16px);
+}
+
+.mcc-os-squiggle__depth--mid {
+  stroke: #11365a;
+  transform: translate(10px, 11px);
+}
+
+.mcc-os-squiggle__depth--near {
+  stroke: #0a0f13;
+  opacity: 0.62;
+  transform: translate(5px, 6px);
+}
+
+.mcc-os-squiggle__line {
+  stroke: url(#mcc-os-squiggle-gradient);
+  stroke-width: 17;
+  stroke-dasharray: 980;
+  stroke-dashoffset: 980;
+  animation:
+    mcc-os-squiggle-draw 1.85s cubic-bezier(0.2, 0.78, 0.2, 1) forwards,
+    mcc-os-squiggle-luma 4.8s ease-in-out 1.85s infinite;
+}
+
+.mcc-os-squiggle__bevel {
+  stroke: url(#mcc-os-squiggle-bevel);
+  stroke-width: 5;
+  stroke-dasharray: 980;
+  stroke-dashoffset: 980;
+  opacity: 0.72;
+  transform: translate(-2px, -4px);
+  animation: mcc-os-squiggle-draw 1.85s cubic-bezier(0.2, 0.78, 0.2, 1) forwards;
+}
+
+.mcc-os-squiggle__glint {
+  stroke: rgba(255, 255, 255, 0.74);
+  stroke-width: 6;
+  stroke-dasharray: 78 980;
+  stroke-dashoffset: 730;
+  opacity: 0;
+  transform: translate(-2px, -4px);
+  animation: mcc-os-squiggle-glint 3.4s linear 2.1s infinite;
+}
+
+.mcc-home.is-screen-ready .mcc-monitor-desktop > .mcc-os-squiggle {
+  pointer-events: none;
+}
+
+@keyframes mcc-os-squiggle-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes mcc-os-squiggle-luma {
+  0%,
+  100% {
+    filter: saturate(1) brightness(1);
+  }
+
+  50% {
+    filter: saturate(1.28) brightness(1.08);
+  }
+}
+
+@keyframes mcc-os-squiggle-glint {
+  0% {
+    opacity: 0;
+    stroke-dashoffset: 920;
+  }
+
+  12%,
+  42% {
+    opacity: 0.52;
+  }
+
+  62%,
+  100% {
+    opacity: 0;
+    stroke-dashoffset: -160;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mcc-os-squiggle__line,
+  .mcc-os-squiggle__bevel,
+  .mcc-os-squiggle__glint {
+    animation: none;
+  }
+
+  .mcc-os-squiggle__line,
+  .mcc-os-squiggle__bevel {
+    stroke-dashoffset: 0;
+  }
+}
+
 .mcc-home.is-screen-mode .mcc-preview-window {
   font-size: clamp(0.9rem, 1.13vw, 1.1rem);
   box-shadow:
@@ -2256,7 +2452,7 @@
 
 }
 
-@media (max-width: 760px) {
+@media (max-width: 760px), (max-aspect-ratio: 3/4) {
   .mcc-home.is-screen-mode {
     --mcc-screen-zoom: 1;
     --mcc-screen-x: 0vw;
@@ -2426,6 +2622,73 @@
   .mcc-home.is-screen-mode .mcc-monitor-taskbar {
     position: fixed;
     min-height: 58px;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 7px 8px;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar a,
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar time {
+    position: fixed;
+    bottom: 8px;
+    min-height: 42px;
+    padding: 3px 9px;
+    font-size: 1.05rem;
+    white-space: nowrap;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar a {
+    left: 8px;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar time {
+    right: 8px;
+    margin-left: 0;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-taskbar a span {
+    width: 19px;
+    height: 19px;
+  }
+
+  .mcc-home.is-phone-mode .mcc-preview-window--articles,
+  .mcc-home.is-phone-mode .mcc-preview-window--portfolio {
+    display: none;
+  }
+
+  .mcc-home.is-phone-mode .mcc-monitor-desktop {
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .mcc-home.is-phone-mode .mcc-preview-window--members,
+  .mcc-home.is-phone-mode .mcc-preview-window--twitter {
+    left: 88px;
+    width: calc(100vw - 102px);
+  }
+
+  .mcc-home.is-phone-mode .mcc-preview-window--members {
+    top: 12px;
+    height: calc(100svh - 222px);
+  }
+
+  .mcc-home.is-phone-mode .mcc-preview-window--twitter {
+    top: calc(100svh - 198px);
+    height: 128px;
+  }
+
+  .mcc-home.is-phone-mode .mcc-preview-twitter-mark {
+    width: 82px;
+    height: 62px;
   }
 
   .mcc-mobile-gateway {

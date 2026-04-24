@@ -575,18 +575,19 @@ if (home && canvas && !phoneViewport.matches) {
     lampPool.position.set(lampConeWorld.x, -0.595, lampConeWorld.z);
   }
   syncLampCone();
+  const cupPosition = new THREE.Vector3(0.24, 0.18, 0.42);
   const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.16, 0.42, 18), mats.rubber);
-  cup.position.set(0.36, 0.18, 0.1);
+  cup.position.copy(cupPosition);
   cup.castShadow = true;
   cup.receiveShadow = true;
   lampGroup.add(cup);
   const cupRim = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.012, 8, 28), mats.metal);
-  cupRim.position.set(0.36, 0.4, 0.1);
+  cupRim.position.set(cupPosition.x, 0.4, cupPosition.z);
   cupRim.rotation.x = Math.PI / 2;
   cupRim.castShadow = true;
   lampGroup.add(cupRim);
   const cupHandle = new THREE.Mesh(new THREE.TorusGeometry(0.125, 0.015, 8, 24, Math.PI * 1.42), mats.rubber);
-  cupHandle.position.set(0.53, 0.22, 0.1);
+  cupHandle.position.set(cupPosition.x + 0.16, 0.22, cupPosition.z);
   cupHandle.rotation.z = Math.PI / 2;
   cupHandle.castShadow = true;
   lampGroup.add(cupHandle);
@@ -631,13 +632,14 @@ if (home && canvas && !phoneViewport.matches) {
     tower.add(screw);
   });
   box("tower-side-shadow", [0.055, 2.72, 0.78], [-0.55, 0.58, 0.04], mats.plasticDark, tower, false);
-  plane(
+  const towerLabel = plane(
     "tower-label",
     labelTexture(["486 DX2-66"], { width: 280, height: 120, font: "28px 'Courier New'", ruleWidth: 0, background: "#9f9681" }),
-    [0.42, 0.18],
-    [-0.25, -0.04, 0.535],
+    [0.38, 0.15],
+    [-0.18, 0.16, 0.566],
     tower
   );
+  towerLabel.renderOrder = 6;
 
   const books = new THREE.Group();
   books.position.set(0.02, -0.23, -0.3);

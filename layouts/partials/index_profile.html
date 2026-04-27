@@ -92,7 +92,9 @@
                     {{- range readDir "static/avatars" }}
                     {{- $imgURL := print "/avatars/" .Name | relURL }}
                     {{- $user := strings.TrimSuffix ".jpg" .Name }}
-                    <a href="https://twitter.com/{{ $user }}" rel="noopener" aria-label="{{ $user }}">
+                    {{- $href := printf "https://twitter.com/%s" $user }}
+                    {{- if eq $user "darkbluechain" }}{{ $href = "https://x.com/darkblu3c" }}{{ end }}
+                    <a href="{{ $href }}" rel="noopener" aria-label="{{ $user }}">
                         <img src="{{ $imgURL }}" alt="" loading="eager" decoding="async">
                         <em>{{ $user }}</em>
                     </a>

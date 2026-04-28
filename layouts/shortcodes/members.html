@@ -1,7 +1,8 @@
 {{ $albumUrl := print "/static/" ($.Get 0) }}
 <div class="mcc-member-grid">
 {{ range readDir $albumUrl }}
-    {{ $imgURL := print "/" ($.Get 0) "/" .Name | relURL }}
+    {{ $imgPath := print "/" ($.Get 0) "/" .Name | relURL }}
+    {{ $imgURL := printf "%s?v=%d" $imgPath .Size }}
     {{ $jpg := ".jpg" }}
     {{ $user := strings.TrimSuffix $jpg .Name }}
     {{ $href := printf "https://twitter.com/%s" $user }}

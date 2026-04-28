@@ -90,7 +90,8 @@
                 </header>
                 <div class="mcc-preview-members">
                     {{- range readDir "static/avatars" }}
-                    {{- $imgURL := print "/avatars/" .Name | relURL }}
+                    {{- $imgPath := print "/avatars/" .Name | relURL }}
+                    {{- $imgURL := printf "%s?v=%d" $imgPath .Size }}
                     {{- $user := strings.TrimSuffix ".jpg" .Name }}
                     {{- $href := printf "https://twitter.com/%s" $user }}
                     {{- if eq $user "darkbluechain" }}{{ $href = "https://x.com/darkblu3c" }}{{ end }}
